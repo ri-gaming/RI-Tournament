@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="fontface.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png" />
+  <link rel="stylesheet" href="mainregister.css" />
+  <title>Tournament | Register form</title>
+  <style>
+    .attribution {
+      font-size: 15px;
+      text-align: center;
+      color: #000;
+    }
+    .attribution a {
+      color: hsl(0, 0%, 100%);
+    }
+    .terms-container {
+      display: flex;
+      align-items: center;
+    }
+    .terms-container input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body style="background: url('./images/gamebg.jpg') no-repeat center center fixed; background-size: cover;">
+  <div class="container">
+    <div class="textcontainer">
+      <center>
+        <h2>Transaction accept only Gpay/Paytm/PhonePay</h2>
+      </center>
+      <p>
+        <center>
+          <h3 style="text-align: center; color: #000;">Instruction</h3>
+        </center>
+        <ul>
+          <li style="padding: 3px;">
+            <h3>Enter your ID Carefully</h3>
+          </li>
+          <li style="padding: 3px;">
+            <h3>Enter your transaction account mobile number and Name**</h3>
+          </li>
+          <li style="padding: 3px;">
+            <h3>Enter your What's app Number</h3>
+          </li>
+          <li style="padding: 3px;">
+            <h3 style="color: red;">Your registration can be canceled if payment is not sent.</h3>
+          </li>
+        </ul>
+      </p>
+    </div>
+
+    <div class="form_container">
+      <a href="payment.html"><button style="background-color: hotpink; text-decoration-color: ivory;">
+         Make Payment
+       </button></a>
+      <button>
+        <strong><h3>Submit Before clicking Make Payment</h3></strong><br>
+      </button>
+      <div class="forminput">
+          <form id="registrationForm">
+            <div class="field">
+              <input
+                type="text"
+                aria-label="Input Free Fire ID Number"
+                placeholder="Free Fire ID Number"
+                autocomplete="on" id="idnumber"
+                name="idnumber"
+                required
+              />
+            </div>
+            <div class="field">
+              <input
+                type="text"
+                aria-label="ID Name"
+                placeholder="ID Name"
+                autocomplete="on" id="fname"
+                name="fname"
+                required
+              />
+            </div>
+            <div class="field">
+              <input
+                type="text"
+                aria-label="Transaction account user Name"
+                placeholder="Transaction account user Name"
+                autocomplete="on" id="accountname"
+                name="accountname"
+                required
+              />
+            </div>
+            <div class="field">
+              <input
+                type="text"
+                aria-label="Account Mobile number"
+                placeholder="Account Mobile number"
+                autocomplete="on" id="whatsapp"
+                name="whatsapp"
+                required
+              />
+            </div>
+            <div class="field">
+              <input
+                type="text"
+                aria-label="Your Instagram ID"
+                placeholder="Your Instagram ID"
+                autocomplete="on" id="account2number"
+                name="account2number"
+                required
+              />
+            </div>
+            <div class="field">
+              <input
+                class="tiger"
+                type="file"
+                aria-label="Upload Transaction Screenshot"
+                placeholder="Upload Transaction Screenshot"
+                id="screenshot"
+                name="screenshot"
+                required
+              />
+            </div>
+            <div class="">
+              <label for="terms">
+                <input class="ti" type="checkbox" id="terms" required>
+                I agree to the <a href="#">Terms and Condition</a>
+              </label>
+            </div>
+            <button class="claimbutton" onclick="submitForm(event)" id="submit">
+              Submit
+            </button>
+            <a href="payment.html" id="demo" style="text-align: center; color: red; padding: 10px;"></a>
+          </form>
+          <p class="spantext">
+            By clicking the button, you are agreeing to our
+            <a href="#"><strong> Terms and Condition</strong></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p class="attribution">
+      Transaction only 20 Rupees
+    </p>
+  </footer>
+  <script>
+    function submitForm(event) {
+      event.preventDefault();
+      var termsChecked = document.getElementById("terms").checked;
+      if (!termsChecked) {
+        alert("You must agree to the terms and conditions.");
+        return;
+      }
+
+      var txt;
+      var r = confirm("Your data is submitted.");
+
+      var form = document.getElementById("registrationForm");
+      var formData = new FormData(form);
+
+      var message = `New registration:\nFree Fire ID Number: ${formData.get("idnumber")}\nID Name: ${formData.get("fname")}\nTransaction account user Name: ${formData.get("accountname")}\nAccount Mobile number: ${formData.get("whatsapp")}\nInstagram ID: ${formData.get("account2number")}`;
+
+      var telegramBotToken = '7266939521:AAFgp8znU2LAlkdA8vCldKb6TVWPAB36Sdk';
+      var chatId = '-1002156014563';
+
+      // Send message to Telegram
+      fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.ok) {
+          console.error('Error:', data.description);
+          alert('Error sending message: ' + data.description);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error sending message: ' + error.message);
+      });
+
+      // Send photo to Telegram
+      var screenshotFile = formData.get("screenshot");
+      var photoFormData = new FormData();
+      photoFormData.append("chat_id", chatId);
+      photoFormData.append("photo", screenshotFile);
+
+      fetch(`https://api.telegram.org/bot${telegramBotToken}/sendPhoto`, {
+        method: 'POST',
+        body: photoFormData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.ok) {
+          console.error('Error:', data.description);
+          alert('Error sending photo: ' + data.description);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error sending photo: ' + error.message);
+      });
+    }
+  </script>
+</body>
+</html>

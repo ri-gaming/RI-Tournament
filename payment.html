@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <link rel="stylesheet" type="text/css" href="mainpayment.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet"> 
+
+  <title>Tournament | Payment Form</title>
+
+  <style>
+    .payment-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #6200ea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .payment-button:hover {
+      background-color: #3700b3;
+    }
+  </style>
+</head>
+<body style="background: url('./images/b.jpg') no-repeat center center fixed; background-size: cover;">
+<main>
+  <label for="billingCycle"><h1 class="pricing__header">Payment Form</h1></label>
+  <ul> 
+    <li>
+      <h2 style="text-align: center;">NOTE: Your Earning Amount will be sent to your transaction account mobile number.</h2>
+    </li>
+    <li> 
+      <h2 style="text-align: center;">
+      NOTE: Please carefully note the debited account mobile number.
+      </h2>
+    </li>
+    <li> 
+      <h2 style="text-align: center;">
+      <mark>NOTE: We will confirm your registration once we receive your transaction amount.</mark>
+      </h2>
+    </li>
+  </ul>
+
+  <div class="pricing__container">
+
+    <div class="pricing__card">
+      <ul class="pricing__card__feature__list">
+        <li class="pricing__card__feature__list__item pricing__card__feature__list__item--price">
+          <img src="./images/gpay6.png" height="40%" width="40%"/>
+        </li>
+        <li class="pricing__card__feature__list__item">Account Name: RI Platform</li>
+        <li class="pricing__card__feature__list__item">Amount: 30 RS</li>
+      </ul>
+      <button class="payment-button" onclick="makePayment('googlepay')">Send Amount via Google Pay</button>
+    </div>
+  </div>
+</main>
+
+<div class="attribution">
+  WhatsApp Link <a href="https://whatsapp.com/channel/0029VajJknYEKyZLsReNse0F" target="_blank">Online Tournament</a>.
+</div>
+<script>
+  function makePayment(app) {
+    var amount = 30;
+    var upiId = '8128771022@fam'; // Replace with the correct UPI ID
+    var name = 'RI Platform'; // Replace with the correct account name
+
+    var url = '';
+    if (app === 'googlepay') {
+      url = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+    } else if (app === 'paytm') {
+      url = `paytmmp://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+    } else if (app === 'phonepe') {
+      url = `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+    }
+
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>
